@@ -27,7 +27,7 @@ img = cv2.imread('ex2.png', 0)
 cimg = cv2.imread('ex2.png')
 
 # hsv = cv2.cvtColor(cimg, cv2.COLOR_BGR2HSV)
-mask = cv2.inRange(cimg, lower_orange, upper_orange)
+mask = cv2.inRange(cimg, lower_pink, upper_pink)
 res = cv2.bitwise_and(cimg, cimg, mask= mask)
 
 circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 50, np.array([]), 1, 73, 20, 50)
@@ -40,5 +40,7 @@ for i in circles [0, :]:
 cv2.imshow('detected circles', cimg)
 cv2.imshow('mask', mask)
 cv2.imshow('res', res)
+cv2.moveWindow('mask', 475, 50)
+cv2.moveWindow('res', 1000, 0)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
