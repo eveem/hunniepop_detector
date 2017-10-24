@@ -22,25 +22,26 @@ lower_red = np.array([58, 58, 191])
 lower_pink = np.array([158, 62, 203])
 upper_pink = np.array([196, 120, 237])
 
-img = cv2.imread('ex2.png', 0)
+def detected (lower, upper, img_name):
+	img = cv2.imread(img_name, 0)
+	cimg = cv2.imread(img_name)
 
-cimg = cv2.imread('ex2.png')
+	mask = cv2.inRange(cimg, lower, upper)
+	res = cv2.bitwise_and(cimg, cimg, mask=mask)
 
-# hsv = cv2.cvtColor(cimg, cv2.COLOR_BGR2HSV)
-mask = cv2.inRange(cimg, lower_pink, upper_pink)
-res = cv2.bitwise_and(cimg, cimg, mask= mask)
+	circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 50, np.array([]), 1, 73, 20, 50)
+	circles = np.uint16 (np.around (circles))
 
-circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 50, np.array([]), 1, 73, 20, 50)
-circles = np.uint16 (np.around (circles))
+	for i in circles [0, :]:
+		cv2.circle(cimg, (i[0], i[1]), i[2], (0, 0, 0), 3)
+		cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
 
-for i in circles [0, :]:
-	cv2.circle(cimg, (i[0], i[1]), i[2], (0, 0, 0), 3)
-	cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
+	cv2.imshow('detected circles', cimg)
+	cv2.imshow('mask', mask)
+	cv2.imshow('res', res)
+	cv2.moveWindow('mask', 475, 50)
+	cv2.moveWindow('res', 1000, 0)
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
-cv2.imshow('detected circles', cimg)
-cv2.imshow('mask', mask)
-cv2.imshow('res', res)
-cv2.moveWindow('mask', 475, 50)
-cv2.moveWindow('res', 1000, 0)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+detected (lower_pink, upper_pink, 'ex2.jpg')
